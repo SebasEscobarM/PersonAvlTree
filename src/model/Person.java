@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Person {
+public class Person implements Comparable<Person>{
 	//Attributes
 	private String code;
 	private String name;
@@ -76,6 +76,15 @@ public class Person {
 
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
+	}
+
+	@Override
+	public int compareTo(Person arg0) {
+		int ans=this.name.compareTo(arg0.name);
+		if(ans==0) {
+			ans=this.lastName.compareTo(arg0.lastName);
+		}
+		return ans;
 	}
 	
 }
