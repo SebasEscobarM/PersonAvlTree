@@ -48,8 +48,6 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		//Se va a usar derecha menos izquierda para el factor de balanceo
 		if(actNd!=null) {
 			actNd=rebalance(actNd);
-			System.out.println("A");
-			//Falta devolver bien el dato
 		}
 		return actNd;
 	}
@@ -57,53 +55,40 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	@Override
 	public void delete(T obj) {
 		if(root!=null) {
-			delete(false, null, root, new Node<>(obj));
+			this.root=delete(root, new Node<>(obj));
 		}else {
-			//Cambiar por un alert
 			System.out.println("Debe agregar personas antes de poder eliminar.");
 		}
 	}
 	
 	@Override
-	public void delete(boolean left,Node<T> fathr, Node<T> actNd, Node<T> toDel) {
-		//Cuando el primer compare es 0 deberia buscar hacia la izq si el segundo es != de 0 pues al agregar se envia asi
+	public Node<T> delete(Node<T> actNd, Node<T> toDel) {
+		//Si el critero de comparacion del arbol me devuelve 0 pero no son el mismo objeto se envia a la Izq
 		if((cmp.compare(actNd.getItem(), toDel.getItem()))>0) {
-			delete(true, actNd, actNd.getLeft(), toDel);
+			actNd.setLeft(delete(actNd.getLeft(), toDel));
 		}else if((cmp.compare(actNd.getItem(), toDel.getItem()))<0) {
-			delete(false, actNd, actNd.getRight(), toDel);
-		}else{
-			
-			if((actNd.getItem()).compareTo(toDel.getItem())>0) {
-				delete(true, actNd, actNd.getLeft(), toDel);
-			}else if((actNd.getItem()).compareTo(toDel.getItem())<0) {
-				delete(false, actNd, actNd.getRight(), toDel);
+			actNd.setRight(delete(actNd.getRight(), toDel));
+		}else if((actNd.getItem()).compareTo(toDel.getItem())!=0) {
+			actNd.setLeft(delete(actNd.getLeft(), toDel));	
+		}else {
+			if(actNd.getLeft()!=null && actNd.getLeft()!=null) {
+				Node<T> suce=actNd.getRight().findSuccessor();
+				actNd.setItem(suce.getItem());
+				actNd.setRight(delete(actNd.getRight(), suce));
+			}else if(actNd.getLeft()!=null) {
+				return actNd.getLeft();
+			}else if(actNd.getRight()!=null) {
+				return actNd.getRight();
 			}else {
-				if(actNd.getLeft()!=null && actNd.getLeft()!=null) {
-					Node<T> suce=actNd.getRight().findSuccessor();
-					actNd.setItem(suce.getItem());
-					delete(false, actNd, actNd.getRight(), suce);
-				}else if(actNd.getLeft()!=null) {
-					if(left) {
-						fathr.setLeft(actNd.getLeft());
-					}else {
-						fathr.setRight(actNd.getLeft());
-					}
-				}else if(actNd.getLeft()!=null) {
-					if(left) {
-						fathr.setLeft(actNd.getRight());
-					}else {
-						fathr.setRight(actNd.getRight());
-					}
-				}else {
-					if(left) {
-						fathr.setLeft(null);
-					}else {
-						fathr.setRight(null);
-					}
-					return;
-				}
-			}		
+				return null;
+			}
 		}
+		//Se rebalancea a medida que se devuelve
+		//Se va a usar derecha menos izquierda para el factor de balanceo
+		if(actNd!=null){
+			actNd=rebalance(actNd);
+		}
+		return actNd;
 	}
 	
 	@Override
