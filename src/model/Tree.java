@@ -5,13 +5,11 @@ import java.util.Comparator;
 public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	
 	private Node<T> root;
-	private int weight;
 	private Comparator<T> cmp;
 	
 	public Tree(Comparator<T> cmp) {
 
 		this.root = null;
-		this.weight = 0;
 		this.cmp = cmp;
 	}
 
@@ -20,17 +18,17 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		if(root==null) {
 			root=toAdd;
 		}else {
-			add(root,toAdd);		
+			this.root=add(root,toAdd);		
 		}
 	}
 	
 	@Override
-	public void add(Node<T> actNd, Node<T> toAdd) {
+	public Node<T> add(Node<T> actNd, Node<T> toAdd) {
 		//Cuando es 0 se esta enviando a la izquierda como predeterminado
 		if(actNd.getItem()==toAdd.getItem()) {
 			//Cambiar por un alert
 			System.out.println("No se pueden agregar dos items iguales.");
-			return;
+			return null;
 		}
 		
 		if((cmp.compare(actNd.getItem(), toAdd.getItem()))>=0 ) {
@@ -46,6 +44,14 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 				add(actNd.getRight(), toAdd);
 			}
 		}
+		//Se rebalancea a medida que se devuelve
+		//Se va a usar derecha menos izquierda para el factor de balanceo
+		if(actNd!=null) {
+			actNd=rebalance(actNd);
+			System.out.println("A");
+			//Falta devolver bien el dato
+		}
+		return actNd;
 	}
 	
 	@Override
@@ -102,19 +108,84 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	
 	@Override
 	public Node<T> search(T obj) {
-		// TODO Auto-generated method stub
-		return null;
+		if(root==null) {
+			return null;
+		}
+		return search(root, obj);
 	}
+	
+	@Override
+	public Node<T> search(Node<T> actNd, T obj) {
+		if(actNd.getItem().compareTo(obj)==0) {
+			return actNd;
+		}
+		if(cmp.compare(actNd.getItem(), obj)>=0 ) {
+			return search(actNd.getLeft(), obj);
+		}else {
+			return search(actNd.getRight(), obj);
+		}
+	}
+	
+	@Override
+	public int height(Node<T> nd) {
+		if(nd==null) {
+			return 0;
+		}
+		return 1+Math.max(height(nd.getLeft()), height(nd.getRight()));
+	}
+	
 	public Node<T> getRoot() {
 		return root;
 	}
+	
 	public void setRoot(Node<T> root) {
 		this.root = root;
 	}
-	public int getWeight() {
-		return weight;
+	
+	@Override
+	public Node<T> rebalance(Node<T> nd) {
+		int fb=height(nd.getRight())-height(nd.getLeft());
+		if(fb==2) {
+			if(height(nd.getRight().getRight())>height(nd.getRight().getLeft())) {
+				nd=leftRotate(nd);
+				System.out.println("R izq");
+				return nd;
+			}else {
+				nd.setRight(rightRotate(nd.getRight()));
+				nd=leftRotate(nd);
+				System.out.println("R izq 2");
+				return nd;
+			}
+		}else if(fb==-2) {
+			if(height(nd.getLeft().getLeft())>height(nd.getLeft().getRight())) {
+				nd=rightRotate(nd);
+				System.out.println("R der");
+				return nd;
+			}else {
+				nd.setLeft(leftRotate(nd.getLeft()));
+				nd=rightRotate(nd);
+				System.out.println("R der 2");
+				return nd;
+			}
+		}
+		return nd;
 	}
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}	
+	
+	@Override
+	public Node<T> leftRotate(Node<T> nd) {
+		Node<T> a=nd.getRight();
+		Node<T> b=a.getLeft();
+		a.setLeft(nd);
+		nd.setRight(b);
+		return a;
+	}
+
+	@Override
+	public Node<T> rightRotate(Node<T> nd) {
+		Node<T> a=nd.getLeft();
+		Node<T> b=a.getRight();
+		a.setRight(nd);
+		nd.setLeft(b);
+		return a;
+	}
 }
