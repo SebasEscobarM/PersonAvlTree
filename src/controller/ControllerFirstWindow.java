@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
 
-public class ControllerFirstWindow implements Initializable {
+public class ControllerFirstWindow{
 
 	@FXML
 	private Button generatePeopleBTN;
@@ -78,15 +79,19 @@ public class ControllerFirstWindow implements Initializable {
 
 	@FXML
 	void generatePeople(ActionEvent event) throws IOException {
-		thread thrd = new thread();
-		thrd.run();
+		Thread thrd = new Thread(new thread());
+		thrd.start();
 	}
 
 	@SuppressWarnings("resource")
 	public void loadNames() throws IOException {
+		long timeSec = System.currentTimeMillis();
 		Random randMixDocuments = new Random();
 
 		int amountPeople = Integer.parseInt(peopleAddTF.getText());
+		
+		long countFile = 0;
+		boolean exitRead = false;
 
 		String[] names = new String[amountPeople];
 		String[] sexPeople = new String[amountPeople];
@@ -127,6 +132,10 @@ public class ControllerFirstWindow implements Initializable {
 			}
 		}
 		
+		Platform.runLater(()->{
+			loadPeoplePGB.setProgress(0.1);
+		});
+		
 		times = 0;
 		exitFor = false;
 		
@@ -147,19 +156,33 @@ public class ControllerFirstWindow implements Initializable {
 		bufferLectura2 = new BufferedReader(readFile2); 
 		String line2 = ""; 
 		String data2 = ""; 
-		while ((line2 = bufferLectura2.readLine()) != null) { 
+		long countRead = 0;
+		if(amountPeople > 3100) {
+			countRead = 30888;
+		}else if(amountPeople < 500) {
+			countRead =  amountPeople*10;
+		}
+		line2 = bufferLectura2.readLine();
+		while ((line2 = bufferLectura2.readLine()) != null && exitRead == false) { 
 			data2 += line2 + ","; 
+			countFile++;
+			if(countFile == countRead) {
+				exitRead = true;
+			}
 		}
 		String[] tryes2 = data2.split(",");
 		for(int u=0;u<tryes2.length;u++) {
 			int check = randMixDocuments.nextInt(tryes2.length);
-			if(check % 2 == 0 && u % 2 == 0){
-				String temp = namesGen[u];
-				namesGen[u] = namesGen[check];
-				namesGen[check] = temp;
-				namesGen[check+1] = namesGen[u+1];
+			if(check % 11 == 0 && u % 11 == 0){
+				String temp = tryes2[u];
+				tryes2[u] = tryes2[check];
+				tryes2[check] = temp;
 			}
 		}
+		
+		Platform.runLater(()->{
+			loadPeoplePGB.setProgress(0.4);
+		});
 		
 		if (amountPeople > tryes2.length) { 
 			amountPeople = tryes2.length; 
@@ -169,7 +192,6 @@ public class ControllerFirstWindow implements Initializable {
 		exitFor = false;
 		 
 		for (int i=11;i<tryes2.length && exitFor == false;i+=11) { 
-			System.out.println("entre 3");
 			System.out.println(tryes2[i]); 
 			lastName[times] = tryes2[i]; 
 			times++;
@@ -178,8 +200,24 @@ public class ControllerFirstWindow implements Initializable {
 			}
 		}
 		
+		Platform.runLater(()->{
+			loadPeoplePGB.setProgress(1);
+		});
 		
-
+		BufferedReader bufferLectura3 = null;
+		FileReader readFile3 = new FileReader("Data//countriesAmerica.csv");
+		bufferLectura3 = new BufferedReader(readFile3);
+		String line3 = "";
+		String data3 = "";
+		line3 = bufferLectura3.readLine();
+		while ((line3 = bufferLectura3.readLine()) != null) {
+			data3 += line3 + ",";
+		}
+		
+		long timeEnd = System.currentTimeMillis();
+		double realTime = (timeEnd - timeSec)/1000;
+		String showTime = realTime + "";
+		timeProgressBarTX.setText(showTime+"s");
 	}
 
 	class thread implements Runnable {
@@ -192,11 +230,6 @@ public class ControllerFirstWindow implements Initializable {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
 	}
 
 }
