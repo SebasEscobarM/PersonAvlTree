@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="304.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="210.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inicio">
+         <font>
+            <Font name="Bookman Old Style" size="55.0" />
+         </font>
+      </Text>
+      <Text layoutX="23.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ingrese el número de personas a añadir:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <TextField fx:id="peopleAddTF" layoutX="318.0" layoutY="105.0" prefHeight="25.0" prefWidth="136.0" />
+      <ProgressBar fx:id="loadPeoplePGB" layoutX="23.0" layoutY="151.0" prefHeight="31.0" prefWidth="486.0" progress="0.0" />
+      <Text fx:id="timeProgressBarTX" layoutX="524.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0s">
+         <font>
+            <Font size="15.0" />
+         </font></Text>
+      <Button fx:id="searchPeopleBTN" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="130.0" layoutY="199.0" mnemonicParsing="false" onAction="#searchPeople" prefHeight="70.0" prefWidth="66.0" style="-fx-background-color: #FFFFFF;">
+         <graphic>
+            <ImageView fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Multimedia/imageSearch.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="addPeopleBTN" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="355.0" layoutY="199.0" mnemonicParsing="false" onAction="#AddPeople" prefHeight="70.0" prefWidth="66.0" style="-fx-background-color: #FFFFFF;">
+         <graphic>
+            <ImageView fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Multimedia/imageAddPeople100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="offAppBTN" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="246.0" layoutY="199.0" mnemonicParsing="false" onAction="#offApp" prefHeight="70.0" prefWidth="66.0" style="-fx-background-color: #FFFFFF;">
+         <graphic>
+            <ImageView fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Multimedia/imageOff.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="generatePeopleBTN" layoutX="469.0" layoutY="104.0" mnemonicParsing="false" onAction="#generatePeople" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: #204dee;" text="Generar" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

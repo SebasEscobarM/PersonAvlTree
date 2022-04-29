@@ -1,6 +1,7 @@
 
 package main;
 
+import controller.ControllerFirstWindow;
 import controller.ControllerSearchPeople;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -46,8 +47,8 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/SearchPeople.fxml"));
-		loader.setController(new ControllerSearchPeople());
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/FirstWindow.fxml"));
+		loader.setController(new ControllerFirstWindow());
 		Parent parent = loader.load();
 		Scene scene = new Scene(parent);
 		Stage stage = new Stage();

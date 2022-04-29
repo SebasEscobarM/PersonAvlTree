@@ -1,9 +1,16 @@
 package controller;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -30,6 +37,9 @@ import model.Person;
 import model.PersonData;
 
 public class ControllerSearchPeople implements Initializable{
+	
+	@FXML
+    private Button backBTM;
 	
 	@FXML
     private TableColumn<Person, String> codeCOL;
@@ -64,12 +74,14 @@ public class ControllerSearchPeople implements Initializable{
     @FXML
     private TextField wantedPersonTF;
     
-    Person stClicked;
-
+    Person stClicked;	
+    
     @FXML
-    void addPerson(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/AddPeople.fxml"));
-		loader.setController(new ControllerAddPeople());
+    void backAct(ActionEvent event) throws IOException {
+    	Stage stage1 = (Stage) this.backBTM.getScene().getWindow();
+        stage1.close();
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/FirstWindow.fxml"));
+		loader.setController(new ControllerFirstWindow());
 		Parent parent = loader.load();
 		Scene scene = new Scene(parent);
 		Stage stage = new Stage();
@@ -85,11 +97,6 @@ public class ControllerSearchPeople implements Initializable{
     	PersonData.person.remove(stClicked);
     	PersonData.showPerson.remove(stClicked);
     }
-
-    @FXML
-    void editPerson(ActionEvent event) {
-
-    }
     
     @FXML
     public void getKeyPressed(KeyEvent event) {
@@ -97,13 +104,6 @@ public class ControllerSearchPeople implements Initializable{
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
     	
     }
-    
-    @FXML
-    void exitApp(ActionEvent event) {
-    	Platform.exit();
-    	System.exit(0);
-    }
-
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -127,9 +127,9 @@ public class ControllerSearchPeople implements Initializable{
 		personTV.setOnMouseClicked(event ->{
 			stClicked = personTV.getSelectionModel().getSelectedItem();
 		});
-
-		
-	}
+	}	
 
 }
+
+
 
