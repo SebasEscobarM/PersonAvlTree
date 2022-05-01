@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Person implements Comparable<Person>{
@@ -9,14 +10,14 @@ public class Person implements Comparable<Person>{
 	private String name;
 	private String lastName;
 	private String sex;
-	private LocalDate dateBirth;
+	private LocalDateTime dateBirth;
 	private int height;
 	private String nationality;
 	
 	
 	
 	//Methods
-	public Person(String code, String name, String lastName, String sex, LocalDate dateBirth, int height,String nationality) {
+	public Person(String code, String name, String lastName, String sex, LocalDateTime dateBirth, int height,String nationality) {
 		this.code = UUID.randomUUID().toString();
 		this.name = name;
 		this.lastName = lastName;
@@ -54,11 +55,11 @@ public class Person implements Comparable<Person>{
 		this.sex = sex;
 	}
 
-	public LocalDate getDateBirth() {
+	public LocalDateTime getDateBirth() {
 		return dateBirth;
 	}
 
-	public void setDateBirth(LocalDate dateBirth) {
+	public void setDateBirth(LocalDateTime dateBirth) {
 		this.dateBirth = dateBirth;
 	}
 
