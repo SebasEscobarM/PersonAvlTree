@@ -6,15 +6,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.concurrent.ThreadLocalRandom;
 
+import java.util.UUID;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +30,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
+import model.ComparatorFullname;
+import model.ComparatorLastname;
+import model.ComparatorName;
+import model.Node;
+import model.Person;
+import model.PersonData;
+import model.Tree;
 
 public class ControllerFirstWindow{
 
@@ -51,6 +60,12 @@ public class ControllerFirstWindow{
 
 	@FXML
 	private Text timeProgressBarTX;
+
+	public ControllerFirstWindow() {
+		Tree<Person> primerTree=new Tree<>(new ComparatorName());
+		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
+		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
+	}
 
 	@FXML
 	void AddPeople(ActionEvent event) throws IOException {
@@ -91,6 +106,10 @@ public class ControllerFirstWindow{
 
 	@SuppressWarnings("resource")
 	public void loadNames() throws IOException {
+		Tree<Person> primerTree=new Tree<>(new ComparatorName());
+		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
+		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
+		
 		long timeSec = System.currentTimeMillis();
 		Random randMixDocuments = new Random();
 
@@ -98,13 +117,14 @@ public class ControllerFirstWindow{
 		
 		long countFile = 0;
 		boolean exitRead = false;
-
+		
+		String[] code = new String[amountPeople];
 		String[] names = new String[amountPeople];
 		String[] sexPeople = new String[amountPeople];
 		String[] lastName = new String[amountPeople];
 		String[] nationality = new String[amountPeople];
 		int [] height = new int[amountPeople];
-		LocalDateTime[] birthDay = new LocalDateTime[amountPeople];	
+		LocalDate[] birthDay = new LocalDate[amountPeople];	
 		
 		BufferedReader bufferLectura = null;
 		FileReader readFile = new FileReader("Data//babynames-clean.csv");
@@ -123,9 +143,7 @@ public class ControllerFirstWindow{
 			}
 			if (namesGenArr % 2 == 0) {
 				names[i] = namesGen[namesGenArr];
-				System.out.println(names[i]);
 				sexPeople[i] = namesGen[namesGenArr+1];
-				System.out.println(sexPeople[i]);
 			}
 		}
 		
@@ -161,11 +179,9 @@ public class ControllerFirstWindow{
 			int tryesArr = 1;
 			while(tryesArr % 11 != 0) {
 				tryesArr = (int) (Math.random() * tryes2.length);
-				System.out.println(tryesArr);
 			}
 			if (tryesArr % 11 == 0) {
 				lastName[i] = tryes2[tryesArr];
-				System.out.println(lastName[i]);
 			}
 		}
 
@@ -209,7 +225,7 @@ public class ControllerFirstWindow{
 		
 		LocalDate getDateRandomStart;
 		LocalDate getDateRandomEnd = LocalDate.of(2020, 12, 31);
-		LocalDateTime Date;
+		LocalDate Date;
 		
 		double minValueCountry = 0.04;
 		double maxValueCountry = 33.5;
@@ -219,166 +235,151 @@ public class ControllerFirstWindow{
 		double minValueBirth = 12.0;
 		double maxValueBirth = 40.29;
 		
+		Person person;
+		
 		for(int y=0;y < amountPeople;y++) {
+			code[y] = UUID.randomUUID().toString();
 
-			double percentageCountry = r.nextDouble() * maxValueCountry + 2;
-			System.out.println(percentageCountry);
+			double percentageCountry = minValueCountry + (maxValueCountry - minValueCountry) * r.nextDouble();
 
-			double percentageBirth = r.nextDouble() * maxValueBirth + 1;
-			System.out.println(percentageBirth);
+			double percentageBirth = minValueBirth + (maxValueBirth - minValueBirth) * r.nextDouble();
 			
 			if(percentageCountry > 21.0 && percentageCountry < 50.1) {
-				System.out.println("USA");
 				nationality[y] = "Estadounidense";
 			}else if(percentageCountry < 21.0 && percentageCountry > 12.4) {
-				System.out.println("Brasil");
 				nationality[y] = "Brasileño";
 			}else if(percentageCountry < 12.4 && percentageCountry > 5.0) {
-				System.out.println("Mexico");
 				nationality[y] = "Mexicano";
 			}else if(percentageCountry < 5.0 && percentageCountry > 4.44) {
-				System.out.println("Colombia");
 				nationality[y] = "Colombiano";
 			}else if (percentageCountry < 4.44 && percentageCountry > 3.37) {
-				System.out.println("Argentina");
 				nationality[y] = "Argentino";
 			}else if(percentageCountry < 3.37 && percentageCountry > 3.24) {
-				System.out.println("Canadá");
 				nationality[y] = "Canadiense";
 			}else if(percentageCountry < 3.24 && percentageCountry > 2.78) {
-				System.out.println("Perú");
 				nationality[y] = "Peruano";
 			}else if(percentageCountry < 2.78 && percentageCountry > 1.87) {
-				System.out.println("Venezuela");
 				nationality[y] = "Venezolano";
 			}else if(percentageCountry < 1.87 && percentageCountry > 1.75) {
-				System.out.println("Chile");
 				nationality[y] = "Chileno";
 			}else if(percentageCountry < 1.75 && percentageCountry > 1.72) {
-				System.out.println("Guatemala");
 				nationality[y] = "Guatemalteco";
 			}else if(percentageCountry < 1.72 && percentageCountry > 1.14) {
-				System.out.println("Ecuador");
 				nationality[y] = "Ecuatoriano";
 			}else if(percentageCountry < 1.14 && percentageCountry > 1.117) {
-				System.out.println("Bolivia");
 				nationality[y] = "Boliviano";
 			}else if(percentageCountry < 1.117 && percentageCountry > 1.110) {
-				System.out.println("Haití");
 				nationality[y] = "Haitiano";
 			}else if(percentageCountry < 1.110 && percentageCountry > 1.06) {
-				System.out.println("Cuba");
 				nationality[y] = "Cubano";
 			}else if(percentageCountry < 1.06 && percentageCountry > 0.97) {
-				System.out.println("República Dominicana");
 				nationality[y] = "Dominicano";
 			}else if(percentageCountry < 0.97 && percentageCountry > 0.69) {
-				System.out.println("Honduras");
 				nationality[y] = "Hondureño";
 			}else if(percentageCountry < 0.69 && percentageCountry > 0.64) {
-				System.out.println("Paraguay");
 				nationality[y] = "Paraguayo";
 			}else if(percentageCountry < 0.64 && percentageCountry > 0.63) {
-				System.out.println("Nicaragua");
 				nationality[y] = "Nicaragüense";
 			}else if(percentageCountry < 0.63 && percentageCountry > 0.49) {
-				System.out.println("El salvador");
 				nationality[y] = "Salvadoreño";
 			}else if(percentageCountry < 0.49 && percentageCountry > 0.42) {
-				System.out.println("Costa Rica");
 				nationality[y] = "Costarricense";
 			}else if(percentageCountry < 0.42 && percentageCountry > 0.34) {
-				System.out.println("Panamá");
 				nationality[y] = "Panameño";
 			}else if(percentageCountry < 0.34 && percentageCountry > 0.29) {
-				System.out.println("Uruguay");
 				nationality[y] = "Uruguayo";
 			}else if(percentageCountry < 0.29 && percentageCountry > 0.2804) {
-				System.out.println("Jamaica");
 				nationality[y] = "Jamaiquino";
 			}else if(percentageCountry < 0.2804 && percentageCountry > 0.13) {
-				System.out.println("Puerto Rico");
 				nationality[y] = "Puertorriqueño";
 			}else if(percentageCountry < 0.13 && percentageCountry > 0.077) {
-				System.out.println("Trinidad y Tobago");
 				nationality[y] = "Trinitense";
 			}else if(percentageCountry < 0.077 && percentageCountry > 0.057) {
-				System.out.println("Guyana");
 				nationality[y] = "Guyanés";
 			}else if(percentageCountry < 0.057 && percentageCountry > 0.0389) {
-				System.out.println("Surinam");
 				nationality[y] = "Surinamés";
 			}else if(percentageCountry < 0.0389 && percentageCountry > 0.0385) {
-				System.out.println("Belice");
 				nationality[y] = "Beliceño";
 			}else if(percentageCountry < 0.0385 && percentageCountry > 0.0281) {
-				System.out.println("Las Bahamas");
 				nationality[y] = "Bahameño";
 			}else if(percentageCountry < 0.0281 && percentageCountry > 0.0180001) {
-				System.out.println("Barbados");
 				nationality[y] = "Barbadense";
 			}else if(percentageCountry < 0.0180001 && percentageCountry > 0.01103) {
-				System.out.println("Santa Lucia");
 				nationality[y] = "Santalucense";
 			}else if(percentageCountry < 0.01103 && percentageCountry > 0.01087) {
-				System.out.println("Granada");
 				nationality[y] = "Granadino";
 			}else if(percentageCountry < 0.01087 && percentageCountry > 0.00959) {
-				System.out.println("San Vicente y las Granadinas");
 				nationality[y] = "Sanvicentino";
 			}else if(percentageCountry < 0.00959 && percentageCountry > 0.00705) {
-				System.out.println("Antigua Barbuda");
 				nationality[y] = "Antiguano";
 			}else if(percentageCountry < 0.00705 && percentageCountry > 0.005214) {
-				System.out.println("Dominica");
 				nationality[y] = "Dominiqués";
 			}else if(percentageCountry < 0.005214 && percentageCountry > 0.0024) {
-				System.out.println("San Cristóbal y Nieves");
 				nationality[y] = "Sancristobaleño";
 			}
-			
 			
 			if(percentageBirth < 12.94 && percentageBirth > 6.5) {
 				getDateRandomEnd = LocalDate.of(1965, 1, 1);
 				getDateRandomStart = LocalDate.of(1956, 1, 1);
 				Date = calculateDate(getDateRandomStart, getDateRandomEnd, amountPeople);
 				birthDay[y] = Date;
-				int heigthPerson = r.nextInt(185 - 155)+145;
-				System.out.println(heigthPerson);
+				int heigthPerson = 165 + r.nextInt(185 - 165)+1;
 				height[y] = heigthPerson;
 			}else if(percentageBirth > 12.95 && percentageBirth < 13.12) {
 				getDateRandomEnd = LocalDate.of(2005, 1, 1);
 				getDateRandomStart = LocalDate.of(1996, 1, 1);
 				Date = calculateDate(getDateRandomStart, getDateRandomEnd, amountPeople);
 				birthDay[y] = Date;
-				int heigthPerson = r.nextInt(180 - 140)+125;
-				System.out.println(heigthPerson);
+				int heigthPerson = 160 + r.nextInt(185 - 160)+1;
 				height[y] = heigthPerson;
 			}else if(percentageBirth > 13.13 && percentageBirth < 16.03) {
 				getDateRandomEnd = LocalDate.of(1955, 1, 1);
 				getDateRandomStart = LocalDate.of(1920, 1, 1);
 				Date = calculateDate(getDateRandomStart, getDateRandomEnd, amountPeople);
 				birthDay[y] = Date;
-				int heigthPerson = r.nextInt(185 - 160)+150;
-				System.out.println(heigthPerson);
+				int heigthPerson = 165 + r.nextInt(193 - 165)+1;
 				height[y] = heigthPerson;
 			}else if(percentageBirth > 16.04 && percentageBirth < 18.62) {
 				getDateRandomEnd = LocalDate.of(2020, 1, 1);
 				getDateRandomStart = LocalDate.of(2006, 1, 1);
 				Date = calculateDate(getDateRandomStart, getDateRandomEnd, amountPeople);
 				birthDay[y] = Date;
-				int heigthPerson = r.nextInt(150 - 30)+20;
-				System.out.println(heigthPerson);
-				height[y] = heigthPerson;
+				if(Date.isAfter(LocalDate.of(2018, 1, 1))) {
+					int heigthPerson = 80 + r.nextInt(90 - 80)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2016, 1, 1)) && Date.isBefore(LocalDate.of(2018, 1, 1))) {
+					int heigthPerson = 85 + r.nextInt(105 - 85)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2014, 1, 1)) && Date.isBefore(LocalDate.of(2016, 1, 1))) {
+					int heigthPerson = 105 + r.nextInt(125 - 105)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2012, 1, 1)) && Date.isBefore(LocalDate.of(2014, 1, 1))) {
+					int heigthPerson = 120 + r.nextInt(140 - 120)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2010, 1, 1)) && Date.isBefore(LocalDate.of(2016, 1, 1))) {
+					int heigthPerson = 120 + r.nextInt(155 - 120)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2008, 1, 1)) && Date.isBefore(LocalDate.of(2010, 1, 1))) {
+					int heigthPerson = 135 + r.nextInt(165 - 135)+1;
+					height[y] = heigthPerson;
+				}else if(Date.isAfter(LocalDate.of(2006, 1, 1)) && Date.isBefore(LocalDate.of(2008, 1, 1))) {
+					int heigthPerson = 145 + r.nextInt(171 - 145)+1;
+					height[y] = heigthPerson;
+				}
 			}else if(percentageBirth > 18.63 && percentageBirth < 50.8) {
 				getDateRandomEnd = LocalDate.of(1995, 1, 1);
 				getDateRandomStart = LocalDate.of(1966, 1, 1);
 				Date = calculateDate(getDateRandomStart, getDateRandomEnd, amountPeople);
 				birthDay[y] = Date;
-				int heigthPerson = r.nextInt(190 - 160)+155;
-				System.out.println(heigthPerson);
+				int heigthPerson = 170 + r.nextInt(195 - 170)+1;
 				height[y] = heigthPerson;
 			}
+			
+			person = new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]);
+			PersonData.person.add(person);
+			primerTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
+			segTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
+			terTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
 			
 		}
 		
@@ -392,13 +393,12 @@ public class ControllerFirstWindow{
 		timeProgressBarTX.setText(showTime+"s");
 	}
 	
-	public LocalDateTime calculateDate(LocalDate startDate,LocalDate endDate,int amountPeople) {
+	public LocalDate calculateDate(LocalDate startDate,LocalDate endDate,int amountPeople) {
 		long randomEpochDay = 0;
 		long start = startDate.toEpochDay();
 		long end = endDate.toEpochDay();
 		randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
-		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(randomEpochDay),TimeZone.getDefault().toZoneId());
-		System.out.println(date);
+		LocalDate date = LocalDate.ofEpochDay(randomEpochDay);
 		return date;
 	}
 
