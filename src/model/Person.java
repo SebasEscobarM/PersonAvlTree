@@ -1,7 +1,7 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 public class Person implements Comparable<Person>{
 	//Attributes
@@ -13,11 +13,9 @@ public class Person implements Comparable<Person>{
 	private int height;
 	private String nationality;
 	
-	
-	
 	//Methods
 	public Person(String code, String name, String lastName, String sex, LocalDate dateBirth, int height,String nationality) {
-		this.code = UUID.randomUUID().toString();
+		this.code = code;
 		this.name = name;
 		this.lastName = lastName;
 		this.sex = sex;
