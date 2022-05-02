@@ -1,16 +1,22 @@
 package model;
 
 import java.util.Comparator;
+import java.util.ArrayList;
+
 
 public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	
 	private Node<T> root;
 	private Comparator<T> cmp;
+	private Comparator<T> srch;
+	private int weight;
 	
-	public Tree(Comparator<T> cmp) {
+	public Tree(Comparator<T> cmp, Comparator<T> srch) {
 
 		this.root = null;
 		this.cmp = cmp;
+		this.srch=srch;
+		weight=0;
 	}
 
 	@Override
@@ -20,6 +26,7 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		}else {
 			this.root=add(root,toAdd);		
 		}
+		this.weight++;
 	}
 	
 	@Override
@@ -56,6 +63,7 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	public void delete(T obj) {
 		if(root!=null) {
 			this.root=delete(root, new Node<>(obj));
+			this.weight--;
 		}else {
 			System.out.println("Debe agregar personas antes de poder eliminar.");
 		}
@@ -133,23 +141,19 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		if(fb==2) {
 			if(height(nd.getRight().getRight())>height(nd.getRight().getLeft())) {
 				nd=leftRotate(nd);
-				System.out.println("R izq");
 				return nd;
 			}else {
 				nd.setRight(rightRotate(nd.getRight()));
 				nd=leftRotate(nd);
-				System.out.println("R izq 2");
 				return nd;
 			}
 		}else if(fb==-2) {
 			if(height(nd.getLeft().getLeft())>height(nd.getLeft().getRight())) {
 				nd=rightRotate(nd);
-				System.out.println("R der");
 				return nd;
 			}else {
 				nd.setLeft(leftRotate(nd.getLeft()));
 				nd=rightRotate(nd);
-				System.out.println("R der 2");
 				return nd;
 			}
 		}
@@ -172,5 +176,47 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		a.setRight(nd);
 		nd.setLeft(b);
 		return a;
+	}
+
+	@Override
+	public ArrayList<T> searchCoincidences(T toSrch) {
+		ArrayList<T> reslt=searchCoincidences(root, toSrch);
+		return reslt;
+	}
+
+	@Override
+	public ArrayList<T> searchCoincidences(Node<T> actNd, T toSrch) {
+		ArrayList<T> reslt=new ArrayList<>();
+		//Buscar la primera coincindencia y devolver esa coincidencia y todas las coincidencias en sus subarboles
+		Node<T> nd=firstCncidence(actNd, toSrch);
+		//Buscar todas las coincindencias en lso subarboles
+		if(nd!=null) {
+			reslt.add(nd.getItem());
+			ArrayList<T> lft=searchCoincidences(nd.getLeft(), toSrch);
+			ArrayList<T> rgt=searchCoincidences(nd.getRight(), toSrch);
+			if(lft!=null) {
+				reslt.addAll(lft);
+			}
+			if(rgt!=null) {
+				reslt.addAll(rgt);
+			}
+			return reslt;
+		}else {
+			return null;
+		}
+	}
+
+	@Override
+	public Node<T> firstCncidence(Node<T> actNd, T toSrch) {
+		if(actNd==null) {
+			return null;
+		}
+		if(srch.compare(actNd.getItem(), toSrch)>0) {
+			return firstCncidence(actNd.getLeft(), toSrch);
+		}else if(srch.compare(actNd.getItem(), toSrch)<0){
+			return firstCncidence(actNd.getRight(), toSrch);
+		}else {
+			return actNd;
+		}
 	}
 }

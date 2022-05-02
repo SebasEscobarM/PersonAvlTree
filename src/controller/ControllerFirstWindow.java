@@ -62,9 +62,9 @@ public class ControllerFirstWindow{
 	private Text timeProgressBarTX;
 
 	public ControllerFirstWindow() {
-		Tree<Person> primerTree=new Tree<>(new ComparatorName());
-		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
-		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
+//		Tree<Person> primerTree=new Tree<>(new ComparatorName());
+//		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
+//		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
 	}
 
 	@FXML
@@ -106,9 +106,9 @@ public class ControllerFirstWindow{
 
 	@SuppressWarnings("resource")
 	public void loadNames() throws IOException {
-		Tree<Person> primerTree=new Tree<>(new ComparatorName());
-		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
-		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
+//		Tree<Person> primerTree=new Tree<>(new ComparatorName());
+//		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
+//		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
 		
 		long timeSec = System.currentTimeMillis();
 		Random randMixDocuments = new Random();
@@ -377,9 +377,9 @@ public class ControllerFirstWindow{
 			
 			person = new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]);
 			PersonData.person.add(person);
-			primerTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
-			segTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
-			terTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
+//			primerTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
+//			segTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
+//			terTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
 			
 		}
 		

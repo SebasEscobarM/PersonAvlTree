@@ -18,9 +18,9 @@ import model.Tree;
 public class Main extends Application{
 
 	public static void main(String[] args) {
-		Tree<Person> primerTree=new Tree<>(new ComparatorName());
-		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
-		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
+//		Tree<Person> primerTree=new Tree<>(new ComparatorName());
+//		Tree<Person> segTree=new Tree<>(new ComparatorLastname());
+//		Tree<Person> terTree=new Tree<>(new ComparatorFullname());
 		//Personas de prueba.
 //		System.out.println("Holaaa");
 //		
