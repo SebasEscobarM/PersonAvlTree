@@ -11,7 +11,7 @@ class TreeTest {
 	private static Tree<Person> tree;
 	
 	public void setupStage1() {
-		tree=new Tree<>(new ComparatorName());
+		tree=new Tree<>(new ComparatorName(), new SearchName());
 	}
 	
 	@Test

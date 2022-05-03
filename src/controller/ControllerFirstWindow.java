@@ -376,7 +376,9 @@ public class ControllerFirstWindow{
 			}
 			
 			person = new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]);
+			System.out.println(person.getName());
 			PersonData.person.add(person);
+			PersonData.showPerson.add(person);
 //			primerTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
 //			segTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
 //			terTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));

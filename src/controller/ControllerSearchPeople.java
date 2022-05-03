@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,36 +41,18 @@ public class ControllerSearchPeople implements Initializable{
 	
 	@FXML
     private Button backBTM;
-	
-	@FXML
-    private TableColumn<Person, String> codeCOL;
-
-    @FXML
-    private TableColumn<Person, LocalDate> dateBirthCOL;
 
     @FXML
     private Button deletePerson;
-
+    
     @FXML
-    private TableColumn<Person, Integer> heightCOL;
-
-    @FXML
-    private TableColumn<Person, String> lastNameCOL;
-
-    @FXML
-    private TableColumn<Person, String> nameCOL;
-
-    @FXML
-    private TableColumn<Person, String> nationalityCOL;
-
-    @FXML
-    private TableView<Person> personTV;
-
-    @FXML
-    private TableColumn<Person, String> sexCOL;
+    private Button editPerson;
     
     @FXML
     private ComboBox<String> sortByCMB;
+    
+    @FXML
+    private ListView<Person> listShowPersonLV;
 
     @FXML
     private TextField wantedPersonTF;
@@ -91,11 +74,32 @@ public class ControllerSearchPeople implements Initializable{
 
     @FXML
     void deletePerson(ActionEvent event) {
+		deletePerson.setStyle("-fx-background-color: #e80202");
+		deletePerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
-    		deletePerson.setStyle("-fx-background-color: #e80202; ");
+    		
+    		
+			PersonData.person.remove(stClicked);
+			PersonData.showPerson.remove(stClicked);
     	}
-    	PersonData.person.remove(stClicked);
-    	PersonData.showPerson.remove(stClicked);
+    }
+    
+    @FXML
+    void editPerson(ActionEvent event) throws IOException {
+		editPerson.setStyle("-fx-background-color: #e1d904");
+		editPerson.setStyle("-fx-text-fill: white");
+    	if(stClicked != null) {
+    		
+    		Stage stage1 = (Stage) this.editPerson.getScene().getWindow();
+            stage1.close();
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/editPeople.fxml"));
+    		loader.setController(new ControllerEditPeople());
+    		Parent parent = loader.load();
+    		Scene scene = new Scene(parent);
+    		Stage stage = new Stage();
+    		stage.setScene(scene);
+    		stage.show();
+    	}
     }
     
     @FXML
@@ -114,18 +118,11 @@ public class ControllerSearchPeople implements Initializable{
 		list.add("Código");
 		sortByCMB.setItems(list);
 		
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("code"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("name"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("sex"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("dateBirth"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("height"));
-		nameCOL.setCellValueFactory(new PropertyValueFactory<>("nationality"));
 		
-		personTV.setItems(PersonData.showPerson);
+		listShowPersonLV.setItems(PersonData.showPerson);
 		
-		personTV.setOnMouseClicked(event ->{
-			stClicked = personTV.getSelectionModel().getSelectedItem();
+		listShowPersonLV.setOnMouseClicked(event ->{
+			stClicked = listShowPersonLV.getSelectionModel().getSelectedItem();
 		});
 	}	
 
