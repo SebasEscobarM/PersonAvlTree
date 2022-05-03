@@ -62,6 +62,7 @@ public class ControllerSearchPeople implements Initializable{
     
     @FXML
     void backAct(ActionEvent event) throws IOException {
+    	//Obtener la persona y pasarla por parametro
     	Stage stage1 = (Stage) this.backBTM.getScene().getWindow();
         stage1.close();
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/FirstWindow.fxml"));
@@ -78,8 +79,6 @@ public class ControllerSearchPeople implements Initializable{
 		deletePerson.setStyle("-fx-background-color: #e80202");
 		deletePerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
-    		
-    		
 			PersonData.person.remove(stClicked);
 			PersonData.showPerson.remove(stClicked);
     	}
@@ -90,11 +89,10 @@ public class ControllerSearchPeople implements Initializable{
 		editPerson.setStyle("-fx-background-color: #e1d904");
 		editPerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
-    		
     		Stage stage1 = (Stage) this.editPerson.getScene().getWindow();
             stage1.close();
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/editPeople.fxml"));
-    		loader.setController(new ControllerEditPeople());
+    		loader.setController(new ControllerEditPeople(listShowPersonLV.getItems().get(listShowPersonLV.getEditingIndex())));
     		Parent parent = loader.load();
     		Scene scene = new Scene(parent);
     		Stage stage = new Stage();
@@ -104,11 +102,11 @@ public class ControllerSearchPeople implements Initializable{
     }
     
     @FXML
-    public void getKeyReleased(KeyEvent event) {
+    public void getKeyTiped(KeyEvent event) {
     	String actTxt = wantedPersonTF.getText();
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
     	System.out.println(actTxt+" || "+sortSearch);
-    	//Buscar    	
+    	//Buscar
     	PersonData.showPerson.setAll(Database.search(sortSearch, actTxt));
     	listShowPersonLV.setItems(PersonData.showPerson);
     }
