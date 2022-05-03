@@ -84,4 +84,7 @@ public class Person implements Comparable<Person>{
 		return ans;
 	}
 	
+	public String toString() {
+		return name+" "+lastName;
+	}
 }

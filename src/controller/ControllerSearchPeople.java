@@ -34,6 +34,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import main.Main;
+import model.Database;
 import model.Person;
 import model.PersonData;
 
@@ -103,10 +104,13 @@ public class ControllerSearchPeople implements Initializable{
     }
     
     @FXML
-    public void getKeyPressed(KeyEvent event) {
-    	String keyPressedTF = wantedPersonTF.getText();
+    public void getKeyReleased(KeyEvent event) {
+    	String actTxt = wantedPersonTF.getText();
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
-    	
+    	System.out.println(actTxt+" || "+sortSearch);
+    	//Buscar    	
+    	PersonData.showPerson.setAll(Database.search(sortSearch, actTxt));
+    	listShowPersonLV.setItems(PersonData.showPerson);
     }
 
 	@Override

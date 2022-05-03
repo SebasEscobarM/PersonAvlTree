@@ -33,6 +33,7 @@ import main.Main;
 import model.ComparatorFullname;
 import model.ComparatorLastname;
 import model.ComparatorName;
+import model.Database;
 import model.Node;
 import model.Person;
 import model.PersonData;
@@ -379,10 +380,8 @@ public class ControllerFirstWindow{
 			System.out.println(person.getName());
 			PersonData.person.add(person);
 			PersonData.showPerson.add(person);
-//			primerTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
-//			segTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
-//			terTree.add(new Node<Person>(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y])));
-			
+			//Pq no se pone person en el add?
+			Database.add(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]));
 		}
 		
 		Platform.runLater(()->{
