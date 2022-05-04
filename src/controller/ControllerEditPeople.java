@@ -46,8 +46,6 @@ public class ControllerEditPeople implements Initializable{
     private TextField sexActualPersonTF;
     
     private Person toEdit;
-
-    private Person toEdit;
     
     public ControllerEditPeople(Person toEdit) {
     	this.toEdit=toEdit;
