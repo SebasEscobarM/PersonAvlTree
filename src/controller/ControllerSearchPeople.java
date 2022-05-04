@@ -67,6 +67,7 @@ public class ControllerSearchPeople implements Initializable{
     
     @FXML
     void backAct(ActionEvent event) throws IOException {
+    	//Obtener la persona y pasarla por parametro
     	Stage stage1 = (Stage) this.backBTM.getScene().getWindow();
         stage1.close();
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/FirstWindow.fxml"));
@@ -95,7 +96,6 @@ public class ControllerSearchPeople implements Initializable{
 		editPerson.setStyle("-fx-background-color: #e1d904");
 		editPerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
-    		
     		Stage stage1 = (Stage) this.editPerson.getScene().getWindow();
             stage1.close();
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/editPeople.fxml"));
@@ -148,7 +148,7 @@ public class ControllerSearchPeople implements Initializable{
 		list.add("Nombre");
 		list.add("Apellido");
 		list.add("Nombre y Apellido");
-		list.add("Código");
+		list.add("Cï¿½digo");
 		
 		sortByCMB.setItems(list);
 		

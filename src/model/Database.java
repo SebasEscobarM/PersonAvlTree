@@ -2,8 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javafx.collections.ObservableList;
-
 public class Database {
 	
 	public static Tree<Person> codes=new Tree<>(new ComparatorCode(), new SearchCode());
@@ -48,7 +46,7 @@ public class Database {
 				String[] dt=actTxt.split(" ");
 				rsl.addAll(fullnames.searchCoincidences(new Person(null, dt[0] ,dt[1], null, null, 0, null)));
 			}
-		}else if(sortSearch.equals("Código")){
+		}else if(sortSearch.equals("Cï¿½digo")){
 			rsl.addAll(codes.searchCoincidences(new Person(actTxt, null ,null, null, null, 0, null)));
 		}else {
 			rsl=PersonData.person; 

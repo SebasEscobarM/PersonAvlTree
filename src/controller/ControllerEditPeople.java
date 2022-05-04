@@ -44,6 +44,8 @@ public class ControllerEditPeople implements Initializable{
 
     @FXML
     private TextField sexActualPersonTF;
+    
+    private Person toEdit;
 
     private Person toEdit;
     
