@@ -184,7 +184,8 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	public ArrayList<T> searchCoincidences(T toSrch) {
 		ArrayList<T> reslt=new ArrayList<>();
 		//reslt=searchCoincidences(root, toSrch);
-		reslt=subTreeCoincidences(root, toSrch);
+		reslt.addAll(subTreeCoincidences(root, toSrch));
+//		reslt=subTreeCoincidences(root, toSrch);
 		return reslt;
 	}
 
@@ -229,15 +230,11 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 				reslt.add(nd.getItem());
 			}
 			ArrayList<T> lft=new ArrayList<>();
-			lft=subTreeCoincidences(nd.getLeft(), toSrch);
+			lft.addAll(subTreeCoincidences(nd.getLeft(), toSrch));
 			ArrayList<T> rgt=new ArrayList<>();
-			rgt=subTreeCoincidences(nd.getRight(), toSrch);
-			if(lft!=null) {
-				reslt.addAll(lft);
-			}
-			if(rgt!=null) {
-				reslt.addAll(rgt);
-			}
+			rgt.addAll(subTreeCoincidences(nd.getRight(), toSrch));
+			reslt.addAll(lft);
+			reslt.addAll(rgt);
 		}
 		
 		return reslt;

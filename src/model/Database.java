@@ -30,6 +30,7 @@ public class Database {
 	}
 
 	public static ArrayList<Person> search(String sortSearch, String actTxt) {
+		//Arreglar search
 		ArrayList<Person> rsl=new ArrayList<>();
 		if(actTxt.length()==0 || sortSearch==null) {	 
 			rsl=PersonData.person; 
@@ -37,18 +38,22 @@ public class Database {
 		}
 		
 		if(sortSearch.equals("Nombre")) {
-			return names.searchCoincidences(new Person(null, actTxt ,null, null, null, 0, null));
+			rsl.addAll(names.searchCoincidences(new Person(null, actTxt ,null, null, null, 0, null)));
 		}else if(sortSearch.equals("Apellido")){
-			return lastnames.searchCoincidences(new Person(null, null,actTxt, null, null, 0, null));
+			rsl.addAll(lastnames.searchCoincidences(new Person(null, null,actTxt, null, null, 0, null)));
 		}else if(sortSearch.equals("Nombre y Apellido")){
-			String[] dt=actTxt.split(" ");
-			return fullnames.searchCoincidences(new Person(null, dt[0] ,dt[1], null, null, 0, null));
+			if(actTxt.indexOf(" ")==-1) {
+				rsl.addAll(names.searchCoincidences(new Person(null, actTxt ,null, null, null, 0, null)));
+			}else {
+				String[] dt=actTxt.split(" ");
+				rsl.addAll(fullnames.searchCoincidences(new Person(null, dt[0] ,dt[1], null, null, 0, null)));
+			}
 		}else if(sortSearch.equals("Código")){
-			return codes.searchCoincidences(new Person(actTxt, null ,null, null, null, 0, null));
+			rsl.addAll(codes.searchCoincidences(new Person(actTxt, null ,null, null, null, 0, null)));
 		}else {
 			rsl=PersonData.person; 
-			return rsl;
 		}
+		return rsl;
 	}
 	
 	public static void prueba() {

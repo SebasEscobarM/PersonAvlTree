@@ -114,7 +114,7 @@ public class ControllerSearchPeople implements Initializable{
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
     	System.out.println(actTxt+" || "+sortSearch);
     	ArrayList<Person> a=new ArrayList<>();
-    	a=Database.search(sortSearch, actTxt);
+    	a.addAll(Database.search(sortSearch, actTxt));
     	toShow=FXCollections.observableArrayList(a);
     	listShowPersonLV.setItems(toShow);
     	

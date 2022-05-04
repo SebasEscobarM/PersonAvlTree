@@ -9,10 +9,10 @@ public class SearchName implements Comparator<Person>{
 		int x=arg0.getName().length();
 		int y=arg1.getName().length();
 		if(x<y) {
-			return arg0.getName().compareToIgnoreCase(arg1.getName());
+			return arg0.getName().compareTo(arg1.getName());
 		}else {
 			String name1=arg0.getName().substring(0, y);
-			return name1.compareToIgnoreCase(arg1.getName());
+			return name1.compareTo(arg1.getName());
 		}
 	}
 
