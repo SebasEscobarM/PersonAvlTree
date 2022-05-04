@@ -21,11 +21,19 @@ public class Database {
 		lastnames.add(new Node<>(toAdd));
 		fullnames.add(new Node<>(toAdd));
 	}
+	
+	public static void delete(Person toDel) {
+		codes.delete(toDel);
+		names.delete(toDel);
+		lastnames.delete(toDel);
+		fullnames.delete(toDel);
+	}
 
 	public static ArrayList<Person> search(String sortSearch, String actTxt) {
 		ArrayList<Person> rsl=new ArrayList<>();
 		if(actTxt.length()==0 || sortSearch==null) {	 
-			 return rsl;
+			rsl=PersonData.person; 
+			return rsl;
 		}
 		
 		if(sortSearch.equals("Nombre")) {
@@ -38,7 +46,15 @@ public class Database {
 		}else if(sortSearch.equals("Código")){
 			return codes.searchCoincidences(new Person(actTxt, null ,null, null, null, 0, null));
 		}else {
+			rsl=PersonData.person; 
 			return rsl;
 		}
+	}
+	
+	public static void prueba() {
+		System.out.println("Names: "+names.getWeight());
+		System.out.println("lastnames: "+lastnames.getWeight());
+		System.out.println("fullnames: "+fullnames.getWeight());
+		System.out.println("codes: "+codes.getWeight());
 	}
 }

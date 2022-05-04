@@ -10,19 +10,19 @@ public class SearchFullname implements Comparator<Person>{
 		int y=arg1.getName().length();
 		int ans=0;
 		if(x<y) {
-			ans=arg0.getName().compareTo(arg1.getName());
+			ans=arg0.getName().compareToIgnoreCase(arg1.getName());
 		}else {
 			String name1=arg0.getName().substring(0, y);
-			ans=name1.compareTo(arg1.getName());
+			ans=name1.compareToIgnoreCase(arg1.getName());
 		}
 		if(ans==0) {
 			x=arg0.getLastName().length();
 			y=arg1.getLastName().length();
 			if(x<y) {
-				return arg0.getLastName().compareTo(arg1.getLastName());
+				return arg0.getLastName().compareToIgnoreCase(arg1.getLastName());
 			}else {
 				String lstname1=arg0.getLastName().substring(0, y);
-				return lstname1.compareTo(arg1.getLastName());
+				return lstname1.compareToIgnoreCase(arg1.getLastName());
 			}
 		}else {
 			return ans;

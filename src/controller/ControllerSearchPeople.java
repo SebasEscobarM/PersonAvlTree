@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -58,7 +61,9 @@ public class ControllerSearchPeople implements Initializable{
     @FXML
     private TextField wantedPersonTF;
     
-    Person stClicked;	
+    private Person stClicked;
+    
+    private ObservableList<Person> toShow;
     
     @FXML
     void backAct(ActionEvent event) throws IOException {
@@ -78,10 +83,10 @@ public class ControllerSearchPeople implements Initializable{
 		deletePerson.setStyle("-fx-background-color: #e80202");
 		deletePerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
-    		
-    		
+    		Database.delete(stClicked);
 			PersonData.person.remove(stClicked);
 			PersonData.showPerson.remove(stClicked);
+			toShow.remove(stClicked);
     	}
     }
     
@@ -94,7 +99,7 @@ public class ControllerSearchPeople implements Initializable{
     		Stage stage1 = (Stage) this.editPerson.getScene().getWindow();
             stage1.close();
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/editPeople.fxml"));
-    		loader.setController(new ControllerEditPeople());
+    		loader.setController(new ControllerEditPeople(stClicked));
     		Parent parent = loader.load();
     		Scene scene = new Scene(parent);
     		Stage stage = new Stage();
@@ -103,27 +108,52 @@ public class ControllerSearchPeople implements Initializable{
     	}
     }
     
-    @FXML
-    public void getKeyReleased(KeyEvent event) {
+    
+    public void searchList() {
     	String actTxt = wantedPersonTF.getText();
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
     	System.out.println(actTxt+" || "+sortSearch);
-    	//Buscar    	
-    	PersonData.showPerson.setAll(Database.search(sortSearch, actTxt));
-    	listShowPersonLV.setItems(PersonData.showPerson);
+    	ArrayList<Person> a=new ArrayList<>();
+    	a=Database.search(sortSearch, actTxt);
+    	toShow=FXCollections.observableArrayList(a);
+    	listShowPersonLV.setItems(toShow);
+    	
+//    	if(a.size()!=0) {
+//    		for(Person p:a) {
+//    			if(p!=null)
+//    				System.out.println(p.toString());
+//        	}
+//    	}
+    	
+    	//toShow=FXCollections.observableArrayList();
+    	//Buscar
+//    	if(actTxt.equals("") || sortSearch==null) {
+//    		listShowPersonLV.setItems(PersonData.showPerson);
+//    	}else {
+//    		ObservableList<Person> obs=
+//    		PersonData.showPerson.setAll(Database.search(sortSearch, actTxt));
+//        	listShowPersonLV.setItems(PersonData.showPerson);
+//    	}
     }
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		wantedPersonTF.textProperty().addListener(new ChangeListener<String>(){
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String s2) {
+				searchList();
+			}
+		});
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.add("Nombre");
 		list.add("Apellido");
 		list.add("Nombre y Apellido");
 		list.add("Código");
+		
 		sortByCMB.setItems(list);
 		
-		
-		listShowPersonLV.setItems(PersonData.showPerson);
+		toShow=FXCollections.observableArrayList(PersonData.person);
+		listShowPersonLV.setItems(toShow);
 		
 		listShowPersonLV.setOnMouseClicked(event ->{
 			stClicked = listShowPersonLV.getSelectionModel().getSelectedItem();

@@ -72,23 +72,25 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	@Override
 	public Node<T> delete(Node<T> actNd, Node<T> toDel) {
 		//Si el critero de comparacion del arbol me devuelve 0 pero no son el mismo objeto se envia a la Izq
-		if((cmp.compare(actNd.getItem(), toDel.getItem()))>0) {
-			actNd.setLeft(delete(actNd.getLeft(), toDel));
-		}else if((cmp.compare(actNd.getItem(), toDel.getItem()))<0) {
-			actNd.setRight(delete(actNd.getRight(), toDel));
-		}else if((actNd.getItem()).compareTo(toDel.getItem())!=0) {
-			actNd.setLeft(delete(actNd.getLeft(), toDel));	
-		}else {
-			if(actNd.getLeft()!=null && actNd.getLeft()!=null) {
-				Node<T> suce=actNd.getRight().findSuccessor();
-				actNd.setItem(suce.getItem());
-				actNd.setRight(delete(actNd.getRight(), suce));
-			}else if(actNd.getLeft()!=null) {
-				return actNd.getLeft();
-			}else if(actNd.getRight()!=null) {
-				return actNd.getRight();
+		if(actNd!=null) {
+			if((cmp.compare(actNd.getItem(), toDel.getItem()))>0) {
+				actNd.setLeft(delete(actNd.getLeft(), toDel));
+			}else if((cmp.compare(actNd.getItem(), toDel.getItem()))<0) {
+				actNd.setRight(delete(actNd.getRight(), toDel));
+			}else if((actNd.getItem()).compareTo(toDel.getItem())!=0) {
+				actNd.setLeft(delete(actNd.getLeft(), toDel));	
 			}else {
-				return null;
+				if(actNd.getLeft()!=null && actNd.getRight()!=null) {
+					Node<T> suce=actNd.getRight().findSuccessor();
+					actNd.setItem(suce.getItem());
+					actNd.setRight(delete(actNd.getRight(), suce));
+				}else if(actNd.getLeft()!=null) {
+					return actNd.getLeft();
+				}else if(actNd.getRight()!=null) {
+					return actNd.getRight();
+				}else {
+					return null;
+				}
 			}
 		}
 		//Se rebalancea a medida que se devuelve
@@ -180,7 +182,9 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 
 	@Override
 	public ArrayList<T> searchCoincidences(T toSrch) {
-		ArrayList<T> reslt=searchCoincidences(root, toSrch);
+		ArrayList<T> reslt=new ArrayList<>();
+		//reslt=searchCoincidences(root, toSrch);
+		reslt=subTreeCoincidences(root, toSrch);
 		return reslt;
 	}
 
@@ -191,21 +195,54 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		Node<T> nd=firstCncidence(actNd, toSrch);
 		//Buscar todas las coincindencias en lso subarboles
 		if(nd!=null) {
-			reslt.add(nd.getItem());
-			ArrayList<T> lft=searchCoincidences(nd.getLeft(), toSrch);
-			ArrayList<T> rgt=searchCoincidences(nd.getRight(), toSrch);
+			ArrayList<T> lft=new ArrayList<>();
+			lft=subTreeCoincidences(nd.getLeft(), toSrch);
+			ArrayList<T> rgt=new ArrayList<>();
+			rgt=subTreeCoincidences(nd.getRight(), toSrch);
 			if(lft!=null) {
 				reslt.addAll(lft);
 			}
 			if(rgt!=null) {
 				reslt.addAll(rgt);
 			}
-			return reslt;
-		}else {
-			return null;
 		}
+//		if(nd!=null) {
+//			reslt.add(nd.getItem());
+//			ArrayList<T> lft=new ArrayList<>();
+//			lft=searchCoincidences(nd.getLeft(), toSrch);
+//			ArrayList<T> rgt=new ArrayList<>();
+//			rgt=searchCoincidences(nd.getRight(), toSrch);
+//			if(lft!=null) {
+//				reslt.addAll(lft);
+//			}
+//			if(rgt!=null) {
+//				reslt.addAll(rgt);
+//			}
+//		}
+		return reslt;
 	}
-
+	
+	public ArrayList<T> subTreeCoincidences(Node<T> nd, T toSrch){
+		ArrayList<T> reslt=new ArrayList<>();
+		if(nd!=null) {
+			if(srch.compare(nd.getItem(), toSrch)==0) {
+				reslt.add(nd.getItem());
+			}
+			ArrayList<T> lft=new ArrayList<>();
+			lft=subTreeCoincidences(nd.getLeft(), toSrch);
+			ArrayList<T> rgt=new ArrayList<>();
+			rgt=subTreeCoincidences(nd.getRight(), toSrch);
+			if(lft!=null) {
+				reslt.addAll(lft);
+			}
+			if(rgt!=null) {
+				reslt.addAll(rgt);
+			}
+		}
+		
+		return reslt;
+	}
+	
 	@Override
 	public Node<T> firstCncidence(Node<T> actNd, T toSrch) {
 		if(actNd==null) {
@@ -218,5 +255,10 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		}else {
 			return actNd;
 		}
+	}
+	
+	@Override
+	public int getWeight() {
+		return weight;
 	}
 }
