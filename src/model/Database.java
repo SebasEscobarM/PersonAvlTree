@@ -42,22 +42,18 @@ public class Database {
 		}else if(sortSearch.equals("Nombre y Apellido")){
 			if(actTxt.indexOf(" ")==-1) {
 				rsl.addAll(names.searchCoincidences(new Person(null, actTxt ,null, null, null, 0, null)));
+			}else if(actTxt.endsWith(" ")){
+				actTxt.replace(" ", "");
+				rsl.addAll(names.searchCoincidences(new Person(null, actTxt ,null, null, null, 0, null)));
 			}else {
 				String[] dt=actTxt.split(" ");
 				rsl.addAll(fullnames.searchCoincidences(new Person(null, dt[0] ,dt[1], null, null, 0, null)));
 			}
-		}else if(sortSearch.equals("C�digo")){
+		}else if(sortSearch.equals("Codigo")){
 			rsl.addAll(codes.searchCoincidences(new Person(actTxt, null ,null, null, null, 0, null)));
 		}else {
 			rsl=PersonData.person; 
 		}
 		return rsl;
-	}
-	
-	public static void prueba() {
-		System.out.println("Names: "+names.getWeight());
-		System.out.println("lastnames: "+lastnames.getWeight());
-		System.out.println("fullnames: "+fullnames.getWeight());
-		System.out.println("codes: "+codes.getWeight());
 	}
 }

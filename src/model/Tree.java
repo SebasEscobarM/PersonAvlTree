@@ -42,21 +42,20 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 			if(actNd.getLeft()==null) {
 				actNd.setLeft(toAdd);
 			}else {
-				add(actNd.getLeft(), toAdd);
+				actNd.setLeft(add(actNd.getLeft(), toAdd));
 			}
 		}else {
 			if(actNd.getRight()==null) {
 				actNd.setRight(toAdd);
 			}else {
-				add(actNd.getRight(), toAdd);
+				actNd.setRight(add(actNd.getRight(), toAdd));
 			}
 		}
 		//Se rebalancea a medida que se devuelve
 		//Se va a usar derecha menos izquierda para el factor de balanceo
-		if(actNd!=null) {
-			actNd=rebalance(actNd);
-		}
-		return actNd;
+		return rebalance(actNd);
+		
+			
 	}
 	
 	@Override
@@ -96,7 +95,7 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		//Se rebalancea a medida que se devuelve
 		//Se va a usar derecha menos izquierda para el factor de balanceo
 		if(actNd!=null){
-			actNd=rebalance(actNd);
+			return rebalance(actNd);
 		}
 		return actNd;
 	}
@@ -139,24 +138,23 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	
 	@Override
 	public Node<T> rebalance(Node<T> nd) {
+		if(nd==null) {
+			return null;
+		}
 		int fb=height(nd.getRight())-height(nd.getLeft());
 		if(fb==2) {
 			if(height(nd.getRight().getRight())>height(nd.getRight().getLeft())) {
-				nd=leftRotate(nd);
-				return nd;
+				return leftRotate(nd);
 			}else {
 				nd.setRight(rightRotate(nd.getRight()));
-				nd=leftRotate(nd);
-				return nd;
+				return leftRotate(nd);
 			}
 		}else if(fb==-2) {
 			if(height(nd.getLeft().getLeft())>height(nd.getLeft().getRight())) {
-				nd=rightRotate(nd);
-				return nd;
+				return rightRotate(nd);
 			}else {
 				nd.setLeft(leftRotate(nd.getLeft()));
-				nd=rightRotate(nd);
-				return nd;
+				return rightRotate(nd);
 			}
 		}
 		return nd;
@@ -183,9 +181,10 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 	@Override
 	public ArrayList<T> searchCoincidences(T toSrch) {
 		ArrayList<T> reslt=new ArrayList<>();
-		//reslt=searchCoincidences(root, toSrch);
-		reslt.addAll(subTreeCoincidences(root, toSrch));
-//		reslt=subTreeCoincidences(root, toSrch);
+		reslt.addAll(searchCoincidences(root, toSrch));
+		//El metodo de abajo no se elimino porque tambien es una solucion unicamente que es un poco menos eficiente
+		//a pesar de ello no se usa en la version final.
+//		reslt.addAll(subTreeCoincidences(root, toSrch));
 		return reslt;
 	}
 
@@ -194,35 +193,20 @@ public class Tree<T extends Comparable<T>> implements TreeInter<T>{
 		ArrayList<T> reslt=new ArrayList<>();
 		//Buscar la primera coincindencia y devolver esa coincidencia y todas las coincidencias en sus subarboles
 		Node<T> nd=firstCncidence(actNd, toSrch);
-		//Buscar todas las coincindencias en lso subarboles
+		//Buscar todas las coincindencias en los subarboles
 		if(nd!=null) {
+			reslt.add(nd.getItem());
 			ArrayList<T> lft=new ArrayList<>();
-			lft=subTreeCoincidences(nd.getLeft(), toSrch);
+			lft.addAll(searchCoincidences(nd.getLeft(), toSrch));
 			ArrayList<T> rgt=new ArrayList<>();
-			rgt=subTreeCoincidences(nd.getRight(), toSrch);
-			if(lft!=null) {
-				reslt.addAll(lft);
-			}
-			if(rgt!=null) {
-				reslt.addAll(rgt);
-			}
+			rgt.addAll(searchCoincidences(nd.getRight(), toSrch));
+			reslt.addAll(lft);
+			reslt.addAll(rgt);	
 		}
-//		if(nd!=null) {
-//			reslt.add(nd.getItem());
-//			ArrayList<T> lft=new ArrayList<>();
-//			lft=searchCoincidences(nd.getLeft(), toSrch);
-//			ArrayList<T> rgt=new ArrayList<>();
-//			rgt=searchCoincidences(nd.getRight(), toSrch);
-//			if(lft!=null) {
-//				reslt.addAll(lft);
-//			}
-//			if(rgt!=null) {
-//				reslt.addAll(rgt);
-//			}
-//		}
 		return reslt;
 	}
 	
+	@Override
 	public ArrayList<T> subTreeCoincidences(Node<T> nd, T toSrch){
 		ArrayList<T> reslt=new ArrayList<>();
 		if(nd!=null) {

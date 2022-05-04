@@ -19,6 +19,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.Main;
+import model.Database;
+import model.Person;
+import model.PersonData;
 
 import java.util.UUID;
 
@@ -59,6 +62,11 @@ public class ControllerAddPeople implements Initializable{
     	int heightPerson = Integer.parseInt(heightPersonTF.getText());
     	String nationalityPerson = nationalityPersonTF.getText();
     	
+    	Person nwPrs=new Person(codePerson, namePerson, lastNamePerson, sexPerson, dateBirthPerson, heightPerson, nationalityPerson);
+    	System.out.println(nwPrs.getName());
+		PersonData.person.add(nwPrs);
+		PersonData.showPerson.add(nwPrs);
+		Database.add(nwPrs);
     }
 
     @FXML

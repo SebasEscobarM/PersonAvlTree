@@ -148,7 +148,7 @@ public class ControllerSearchPeople implements Initializable{
 		list.add("Nombre");
 		list.add("Apellido");
 		list.add("Nombre y Apellido");
-		list.add("C�digo");
+		list.add("Codigo");
 		
 		sortByCMB.setItems(list);
 		

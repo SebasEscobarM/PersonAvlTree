@@ -18,5 +18,6 @@ public interface TreeInter<T> {
 	public ArrayList<T> searchCoincidences(Node<T> actNd, T toSrch);
 	public Node<T> firstCncidence(Node<T> actNd, T toSrch);
 	public int getWeight();
+	public ArrayList<T> subTreeCoincidences(Node<T> nd, T toSrch);
 	
 }
