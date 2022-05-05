@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="621.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text layoutX="201.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Añadir persona" textAlignment="CENTER">
          <font>
@@ -19,9 +19,9 @@
       </Text>
       <TextField fx:id="namePersonTF" layoutX="29.0" layoutY="87.0" prefHeight="31.0" prefWidth="247.0" promptText="Nombre de la persona" />
       <TextField fx:id="lastNamePersonTF" layoutX="29.0" layoutY="133.0" prefHeight="31.0" prefWidth="247.0" promptText="Apellido de la persona" />
-      <TextField fx:id="heightPersonTF" layoutX="29.0" layoutY="224.0" prefHeight="31.0" prefWidth="247.0" promptText="Estatura de la persona" />
-      <TextField fx:id="nationalityPersonTF" layoutX="29.0" layoutY="268.0" prefHeight="31.0" prefWidth="247.0" promptText="Nacionalidad de la persona" />
-      <DatePicker fx:id="dateBirthPersonDTP" layoutX="333.0" layoutY="90.0" prefHeight="25.0" prefWidth="227.0" promptText="Fecha de nacimiento de la persona" />
+      <TextField fx:id="heightPersonTF" layoutX="29.0" layoutY="233.0" prefHeight="31.0" prefWidth="247.0" promptText="Estatura de la persona" />
+      <TextField fx:id="nationalityPersonTF" layoutX="29.0" layoutY="282.0" prefHeight="31.0" prefWidth="247.0" promptText="Nacionalidad de la persona" />
+      <DatePicker fx:id="dateBirthPersonDTP" layoutX="333.0" layoutY="90.0" prefHeight="25.0" prefWidth="247.0" promptText="Fecha de nacimiento de la persona" />
       <Button fx:id="backBTM" alignment="CENTER" layoutX="24.0" layoutY="19.0" mnemonicParsing="false" onAction="#backAct" prefHeight="38.0" prefWidth="39.0" style="-fx-background-radius: 100;">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="22.0">
@@ -31,11 +31,21 @@
             </ImageView>
          </graphic>
       </Button>
-      <ComboBox fx:id="genrePersonCMB" layoutX="29.0" layoutY="178.0" prefHeight="31.0" prefWidth="247.0" promptText="Sexo de la persona" />
-      <Button fx:id="addPersonBTN" layoutX="394.0" layoutY="270.0" mnemonicParsing="false" onAction="#AddPerson" text="Añadir persona">
+      <ComboBox fx:id="genrePersonCMB" layoutX="29.0" layoutY="183.0" prefHeight="31.0" prefWidth="247.0" promptText="Sexo de la persona" />
+      <Button fx:id="addPersonBTN" layoutX="404.0" layoutY="284.0" mnemonicParsing="false" onAction="#AddPerson" style="-fx-background-color: #204dee;" text="Añadir persona" textFill="WHITE">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
+      <Text layoutX="336.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Código de la persona:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text fx:id="codePerson" layoutX="334.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text=".">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

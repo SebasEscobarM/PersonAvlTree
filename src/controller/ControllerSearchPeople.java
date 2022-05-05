@@ -81,20 +81,15 @@ public class ControllerSearchPeople implements Initializable{
 
     @FXML
     void deletePerson(ActionEvent event) {
-		deletePerson.setStyle("-fx-background-color: #e80202");
-		deletePerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
     		Database.delete(stClicked);
 			PersonData.person.remove(stClicked);
-			PersonData.showPerson.remove(stClicked);
 			toShow.remove(stClicked);
     	}
     }
     
     @FXML
     void editPerson(ActionEvent event) throws IOException {
-		editPerson.setStyle("-fx-background-color: #e1d904");
-		editPerson.setStyle("-fx-text-fill: white");
     	if(stClicked != null) {
     		Stage stage1 = (Stage) this.editPerson.getScene().getWindow();
             stage1.close();
@@ -112,7 +107,6 @@ public class ControllerSearchPeople implements Initializable{
     public void searchList() {
     	String actTxt = wantedPersonTF.getText();
     	String sortSearch = sortByCMB.getSelectionModel().getSelectedItem();
-    	System.out.println(actTxt+" || "+sortSearch);
     	ArrayList<Person> a=new ArrayList<>();
     	a.addAll(Database.search(sortSearch, actTxt));
     	toShow=FXCollections.observableArrayList(a);

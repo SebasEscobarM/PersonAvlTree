@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
 import model.Database;
@@ -32,6 +33,9 @@ public class ControllerAddPeople implements Initializable{
 
     @FXML
     private Button backBTM;
+    
+    @FXML
+    private Text codePerson;
 
     @FXML
     private DatePicker dateBirthPersonDTP;
@@ -52,8 +56,8 @@ public class ControllerAddPeople implements Initializable{
     private TextField nationalityPersonTF;
 
     @FXML
-    void AddPerson(ActionEvent event) {
-    	String codePerson = UUID.randomUUID().toString();
+    void AddPerson(ActionEvent event) throws IOException {
+    	String codePeople = codePerson.getText();
     	String namePerson = namePersonTF.getText();
     	String lastNamePerson = lastNamePersonTF.getText();
     	String sexPerson = genrePersonCMB.getSelectionModel().getSelectedItem();
@@ -61,12 +65,22 @@ public class ControllerAddPeople implements Initializable{
     	
     	int heightPerson = Integer.parseInt(heightPersonTF.getText());
     	String nationalityPerson = nationalityPersonTF.getText();
+    	if(namePersonTF.getText() != "" && lastNamePersonTF.getText() != "" && genrePersonCMB.getSelectionModel().getSelectedItem() != null && dateBirthPersonDTP.getValue() != null && heightPersonTF.getText() != "" && nationalityPersonTF.getText() != "") {
+    		Person nwPrs = new Person(codePeople, namePerson, lastNamePerson, sexPerson, dateBirthPerson, heightPerson,nationalityPerson);
+			System.out.println(nwPrs.getName());
+			PersonData.person.add(nwPrs);
+			Database.add(nwPrs);
+			Stage stage1 = (Stage) this.addPersonBTN.getScene().getWindow();
+	        stage1.close();
+	        FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/FirstWindow.fxml"));
+			loader.setController(new ControllerFirstWindow());
+			Parent parent = loader.load();
+			Scene scene = new Scene(parent);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.show();
+    	}
     	
-    	Person nwPrs=new Person(codePerson, namePerson, lastNamePerson, sexPerson, dateBirthPerson, heightPerson, nationalityPerson);
-    	System.out.println(nwPrs.getName());
-		PersonData.person.add(nwPrs);
-		PersonData.showPerson.add(nwPrs);
-		Database.add(nwPrs);
     }
 
     @FXML
@@ -84,6 +98,7 @@ public class ControllerAddPeople implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		codePerson.setText(UUID.randomUUID().toString());
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.add("Masculino");
 		list.add("Femenino");

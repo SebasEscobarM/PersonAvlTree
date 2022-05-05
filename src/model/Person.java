@@ -85,6 +85,6 @@ public class Person implements Comparable<Person>{
 	}
 	
 	public String toString() {
-		return name+" "+lastName;
+		return name+" "+lastName+"   /   "+sex+"   /   "+height+" cm   /   "+nationality+"   /   "+code;
 	}
 }

@@ -1,8 +1,14 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,6 +22,10 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.csv.CsvWriter;
+
+import com.google.gson.Gson;
+
 import java.util.UUID;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -25,8 +35,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
@@ -39,13 +52,22 @@ import model.Person;
 import model.PersonData;
 import model.Tree;
 
-public class ControllerFirstWindow{
+public class ControllerFirstWindow implements Initializable{
 
 	@FXML
 	private Button generatePeopleBTN;
+	
+	@FXML
+    private ProgressIndicator loadAndSavePGI;
 
 	@FXML
 	private Button addPeopleBTN;
+	
+	@FXML
+	private MenuBar filesMNB;
+	
+	@FXML
+    private AnchorPane archor;
 
 	@FXML
 	private ProgressBar loadPeoplePGB;
@@ -62,10 +84,6 @@ public class ControllerFirstWindow{
 	@FXML
 	private Text timeProgressBarTX;
 
-	public ControllerFirstWindow() {
-
-	}
-
 	@FXML
 	void AddPeople(ActionEvent event) throws IOException {
 		FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("../ui/AddPeople.fxml"));
@@ -81,7 +99,8 @@ public class ControllerFirstWindow{
 
 	@FXML
 	void offApp(ActionEvent event) {
-
+		Platform.exit();
+    	System.exit(0);
 	}
 
 	@FXML
@@ -105,6 +124,12 @@ public class ControllerFirstWindow{
 
 	@SuppressWarnings("resource")
 	public void loadNames() throws IOException {
+		addPeopleBTN.setDisable(true);
+		generatePeopleBTN.setDisable(true);
+		offAppBTN.setDisable(true);
+		searchPeopleBTN.setDisable(true);
+		peopleAddTF.setDisable(true);
+		filesMNB.setDisable(true);
 		
 		long timeSec = System.currentTimeMillis();
 		Random randMixDocuments = new Random();
@@ -372,10 +397,7 @@ public class ControllerFirstWindow{
 			}
 			
 			person = new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]);
-			System.out.println(person.getName());
 			PersonData.person.add(person);
-			PersonData.showPerson.add(person);
-			//Pq no se pone person en el add?
 			Database.add(new Person(code[y],names[y],lastName[y],sexPeople[y],birthDay[y],height[y],nationality[y]));
 		}
 		
@@ -387,6 +409,13 @@ public class ControllerFirstWindow{
 		double realTime = (timeEnd - timeSec)/1000;
 		String showTime = realTime + "";
 		timeProgressBarTX.setText(showTime+"s");
+		
+		addPeopleBTN.setDisable(false);
+		generatePeopleBTN.setDisable(false);
+		offAppBTN.setDisable(false);
+		searchPeopleBTN.setDisable(false);
+		peopleAddTF.setDisable(false);
+		filesMNB.setDisable(false);
 	}
 	
 	public LocalDate calculateDate(LocalDate startDate,LocalDate endDate,int amountPeople) {
@@ -397,6 +426,117 @@ public class ControllerFirstWindow{
 		LocalDate date = LocalDate.ofEpochDay(randomEpochDay);
 		return date;
 	}
+	
+	@FXML
+	void saveFiles(ActionEvent event) throws IOException {
+		loadAndSavePGI.setVisible(true);
+		addPeopleBTN.setDisable(true);
+		generatePeopleBTN.setDisable(true);
+		offAppBTN.setDisable(true);
+		searchPeopleBTN.setDisable(true);
+		peopleAddTF.setDisable(true);
+		archor.setDisable(true);
+		filesMNB.setDisable(true);
+		Thread thrd = new Thread(new threadSave());
+		thrd.start();
+		loadAndSavePGI.setVisible(false);
+		addPeopleBTN.setDisable(false);
+		generatePeopleBTN.setDisable(false);
+		offAppBTN.setDisable(false);
+		searchPeopleBTN.setDisable(false);
+		peopleAddTF.setDisable(false);
+		archor.setDisable(false);
+		filesMNB.setDisable(false);
+	}
+	
+	void saveFilesGson() {
+		Platform.runLater(()->{
+			loadAndSavePGI.setProgress(0);
+		});
+		try {
+			Gson gson = new Gson();
+			String json = gson.toJson(PersonData.person);
+			File file = new File("DataUsers//data.json");
+			Platform.runLater(()->{
+				loadAndSavePGI.setProgress(0.4);
+			});
+			FileOutputStream fos = new FileOutputStream(file);
+			Platform.runLater(()->{
+				loadAndSavePGI.setProgress(0.8);
+			});
+			fos.write(json.getBytes());
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Platform.runLater(()->{
+			loadAndSavePGI.setProgress(1);
+		});
+	}
+	
+	@FXML
+    void loadFiles(ActionEvent event) {
+		loadAndSavePGI.setVisible(true);
+		addPeopleBTN.setDisable(true);
+		generatePeopleBTN.setDisable(true);
+		offAppBTN.setDisable(true);
+		searchPeopleBTN.setDisable(true);
+		peopleAddTF.setDisable(true);
+		archor.setDisable(true);
+		filesMNB.setDisable(true);
+		Thread thrd = new Thread(new threadLoad());
+		thrd.start();
+		loadAndSavePGI.setVisible(false);
+		addPeopleBTN.setDisable(false);
+		generatePeopleBTN.setDisable(false);
+		offAppBTN.setDisable(false);
+		searchPeopleBTN.setDisable(false);
+		peopleAddTF.setDisable(false);
+		archor.setDisable(false);
+		filesMNB.setDisable(false);
+    }
+	
+	void loadFilesGson() {
+		Platform.runLater(()->{
+			loadAndSavePGI.setProgress(0);
+		});
+		try {
+			FileInputStream is = new FileInputStream(new File("DataUsers//data.json"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+			String line;
+			String json = "";
+			while ((line = reader.readLine()) != null) {
+				json += line;
+			}
+			Platform.runLater(()->{
+				loadAndSavePGI.setProgress(0.4);
+			});
+			Gson gson = new Gson();
+			Person[] data = gson.fromJson(json, Person[].class);
+			PersonData.person = new ArrayList<>();
+			Platform.runLater(()->{
+				loadAndSavePGI.setProgress(0.7);
+			});
+			for(Person c : data) {
+				PersonData.person.add(c);
+				Database.add(c);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Platform.runLater(()->{
+			loadAndSavePGI.setProgress(1);
+		});
+	}
+
 
 	class thread implements Runnable {
 		@Override
@@ -408,6 +548,26 @@ public class ControllerFirstWindow{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	class threadSave implements Runnable {
+		@Override
+		public void run() {
+			saveFilesGson();
+		}
+	}
+	
+	class threadLoad implements Runnable {
+		@Override
+		public void run() {
+			loadFilesGson();
+		}
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		loadAndSavePGI.setDisable(true);
+		loadAndSavePGI.setVisible(false);
 	}
 
 }

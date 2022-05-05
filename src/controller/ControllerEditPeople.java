@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.Main;
 import model.Database;
@@ -23,6 +24,9 @@ public class ControllerEditPeople implements Initializable{
 	
 	@FXML
     private Button backBTM;
+	
+	@FXML
+    private Text codePerson;
 
     @FXML
     private TextField dateBirthActualPersonTF;
@@ -66,12 +70,10 @@ public class ControllerEditPeople implements Initializable{
 
     @FXML
     void saveChanges(ActionEvent event) throws IOException {
-    	if(nameActualPersonTF.getText() != "" || lastNameActualPersonTF.getText() != "" || sexActualPersonTF.getText() != "" || dateBirthActualPersonTF.getText() != "" || heightActualPersonTF.getText() != "" || nationalityActualPersonTF.getText() != "") {
+    	if(nameActualPersonTF.getText() != toEdit.getName() || lastNameActualPersonTF.getText() != toEdit.getLastName() || sexActualPersonTF.getText() != toEdit.isSex() || dateBirthActualPersonTF.getText() != "" || heightActualPersonTF.getText() != (toEdit.getHeight()+"") || nationalityActualPersonTF.getText() != toEdit.getNationality()) {
     		Person nwP=new Person(toEdit.getCode(), nameActualPersonTF.getText(), lastNameActualPersonTF.getText(), sexActualPersonTF.getText(), LocalDate.parse(dateBirthActualPersonTF.getText()), Integer.parseInt(heightActualPersonTF.getText()), nationalityActualPersonTF.getText());
     		PersonData.person.remove(toEdit);
     		PersonData.person.add(nwP);
-    		PersonData.showPerson.remove(toEdit);
-    		PersonData.showPerson.add(nwP);
     		Database.delete(toEdit);
     		Database.add(nwP);
     		
@@ -88,6 +90,7 @@ public class ControllerEditPeople implements Initializable{
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		codePerson.setText(toEdit.getCode()+".");
 		nameActualPersonTF.setText(toEdit.getName());
     	lastNameActualPersonTF.setText(toEdit.getLastName());
     	heightActualPersonTF.setText(toEdit.getHeight()+"");
