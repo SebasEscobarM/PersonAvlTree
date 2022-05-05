@@ -67,7 +67,6 @@ public class ControllerAddPeople implements Initializable{
     	String nationalityPerson = nationalityPersonTF.getText();
     	if(namePersonTF.getText() != "" && lastNamePersonTF.getText() != "" && genrePersonCMB.getSelectionModel().getSelectedItem() != null && dateBirthPersonDTP.getValue() != null && heightPersonTF.getText() != "" && nationalityPersonTF.getText() != "") {
     		Person nwPrs = new Person(codePeople, namePerson, lastNamePerson, sexPerson, dateBirthPerson, heightPerson,nationalityPerson);
-			System.out.println(nwPrs.getName());
 			PersonData.person.add(nwPrs);
 			Database.add(nwPrs);
 			Stage stage1 = (Stage) this.addPersonBTN.getScene().getWindow();
